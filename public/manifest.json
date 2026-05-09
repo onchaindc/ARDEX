@@ -1,0 +1,9 @@
+{
+  "name": "ARDEX",
+  "short_name": "ARDEX",
+  "description": "Private perpetual futures on Solana + Arcium",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#08110f",
+  "theme_color": "#54f4a7"
+}
