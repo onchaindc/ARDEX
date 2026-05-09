@@ -4,6 +4,8 @@ ARDEX is a hackathon MVP for private perpetual futures on Solana with Arcium-sty
 
 The core product flow is intentionally simple: deposit devnet USDC collateral, open one isolated SOL/BTC long or short at 1-5x leverage, encrypt the sensitive position payload, store only opaque commitments in a Solana PDA, run private liquidation checks, then close and settle PnL.
 
+Private Perp DEX: positions, entry prices, liquidation levels, and PnL are encrypted and hidden from MEV bots, liquidation hunters, and other traders.
+
 ## What Is Built
 
 - Next.js 14 app router frontend with a trader terminal and private dashboard.
@@ -75,17 +77,6 @@ After deploy:
 1. Update `declare_id!` in `programs/ardex/src/lib.rs`.
 2. Update `[programs.devnet]` in `Anchor.toml`.
 3. Add the same program ID to `.env.local` as `NEXT_PUBLIC_ARDEX_PROGRAM_ID`.
-
-## GitHub Repo
-
-From `C:\Users\USER\Documents\New project\ARDEX`:
-
-```bash
-git init
-git add .
-git commit -m "Initial ARDEX private perps MVP"
-gh repo create ARDEX --private --source=. --remote=origin --push
-```
 
 ## Notes
 
