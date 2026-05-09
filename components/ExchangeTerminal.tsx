@@ -1,7 +1,5 @@
 "use client";
 
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import { useWallet } from "@solana/wallet-adapter-react";
 import {
   Activity,
   ArrowDownToLine,
@@ -16,6 +14,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 
+import { WalletButton, useWalletAccount } from "@/components/WalletContextProvider";
 import { encryptPosition, decryptPosition, runPrivateLiquidationCheck } from "@/lib/arcium/client";
 import { getAllOraclePrices } from "@/lib/pyth/prices";
 import {
@@ -52,8 +51,8 @@ const emptyLedger: LocalLedger = {
 };
 
 export function ExchangeTerminal() {
-  const { publicKey, connected } = useWallet();
-  const owner = publicKey?.toBase58();
+  const { publicKey, connected } = useWalletAccount();
+  const owner = publicKey;
   const [market, setMarket] = useState<MarketSymbol>("SOL");
   const [side, setSide] = useState<PositionSide>("long");
   const [leverage, setLeverage] = useState(3);
@@ -245,7 +244,7 @@ export function ExchangeTerminal() {
             <p>Private perpetual futures on Solana + Arcium</p>
           </div>
         </div>
-        <WalletMultiButton />
+        <WalletButton />
       </header>
 
       <section className="marketStrip" aria-label="Markets">

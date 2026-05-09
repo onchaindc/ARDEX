@@ -39,18 +39,14 @@ button {
   cursor: pointer;
 }
 
-.wallet-adapter-button {
+.walletButton {
   height: 40px !important;
   border-radius: 8px !important;
   background: #ecfff6 !important;
   color: #08110f !important;
   font-weight: 800 !important;
   padding: 0 14px !important;
-}
-
-.wallet-adapter-dropdown-list {
-  background: #142622 !important;
-  border: 1px solid var(--line) !important;
+  border: 0;
 }
 
 .shell {
