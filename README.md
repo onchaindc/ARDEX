@@ -1,6 +1,6 @@
 # ARDEX
 
-ARDEX is a hackathon MVP for private perpetual futures on Solana with Arcium-style encrypted position state.
+ARDEX is a MVP for private perpetual futures on Solana with Arcium-style encrypted position state.
 
 The core product flow is intentionally simple: deposit devnet USDC collateral, open one isolated SOL/BTC long or short at 1-5x leverage, encrypt the sensitive position payload, store only opaque commitments in a Solana PDA, run private liquidation checks, then close and settle PnL.
 
