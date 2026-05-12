@@ -93,11 +93,9 @@ async function getUserScopedKey(owner: string) {
 }
 
 async function warmArciumClient() {
-  try {
-    await import("@arcium-hq/client");
-  } catch {
-    // The browser demo keeps a local AES fallback so judging can run without an Arcium cluster.
-  }
+  // Hook point for the Arcium SDK in a live encrypted-compute deployment.
+  // The Vercel demo uses browser crypto so judges can open the app without a cluster.
+  await Promise.resolve();
 }
 
 async function digest(value: string): Promise<string> {
