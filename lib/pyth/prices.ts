@@ -7,18 +7,20 @@ const FALLBACK_PRICES: PriceMap = {
   BTC: 64250
 };
 
+const DEFAULT_HERMES_URL = "https://hermes.pyth.network";
+const DEFAULT_FEED_IDS: Record<MarketSymbol, string> = {
+  SOL: "ef0d8b6fda2ceba41da15d4095d1da392a0d2f8ed0c6c7bc0f4cfac8c280b56d",
+  BTC: "e62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43"
+};
+
 const FEED_ENV: Record<MarketSymbol, string | undefined> = {
   SOL: process.env.NEXT_PUBLIC_PYTH_SOL_USD_FEED_ID,
   BTC: process.env.NEXT_PUBLIC_PYTH_BTC_USD_FEED_ID
 };
 
 export async function getOraclePrice(symbol: MarketSymbol): Promise<number> {
-  const hermesUrl = process.env.NEXT_PUBLIC_PYTH_HERMES_URL;
-  const feedId = FEED_ENV[symbol];
-
-  if (!hermesUrl || !feedId) {
-    return simulatePrice(symbol);
-  }
+  const hermesUrl = process.env.NEXT_PUBLIC_PYTH_HERMES_URL ?? DEFAULT_HERMES_URL;
+  const feedId = FEED_ENV[symbol] ?? DEFAULT_FEED_IDS[symbol];
 
   try {
     const response = await fetch(
