@@ -34,7 +34,11 @@ export async function decryptPosition(
   const key = await getUserScopedKey(owner);
   const nonce = base64ToBytes(record.nonce);
   const ciphertext = base64ToBytes(record.encryptedPayload);
-  const plaintext = await crypto.subtle.decrypt({ name: "AES-GCM", iv: nonce }, key, ciphertext);
+  const plaintext = await crypto.subtle.decrypt(
+    { name: "AES-GCM", iv: toArrayBuffer(nonce) },
+    key,
+    toArrayBuffer(ciphertext)
+  );
   return JSON.parse(decoder.decode(plaintext)) as PlainPosition;
 }
 
@@ -57,9 +61,9 @@ async function encryptWithUserScopedKey(owner: string, position: PlainPosition):
   const key = await getUserScopedKey(owner);
   const nonce = crypto.getRandomValues(new Uint8Array(12));
   const ciphertext = await crypto.subtle.encrypt(
-    { name: "AES-GCM", iv: nonce },
+    { name: "AES-GCM", iv: toArrayBuffer(nonce) },
     key,
-    encoder.encode(JSON.stringify(position))
+    toArrayBuffer(encoder.encode(JSON.stringify(position)))
   );
 
   return {
@@ -72,7 +76,7 @@ async function encryptWithUserScopedKey(owner: string, position: PlainPosition):
 async function getUserScopedKey(owner: string) {
   const material = await crypto.subtle.importKey(
     "raw",
-    encoder.encode(`ardex:demo:${owner}`),
+    toArrayBuffer(encoder.encode(`ardex:demo:${owner}`)),
     "PBKDF2",
     false,
     ["deriveKey"]
@@ -81,7 +85,7 @@ async function getUserScopedKey(owner: string) {
   return crypto.subtle.deriveKey(
     {
       name: "PBKDF2",
-      salt: encoder.encode("arcium-private-perps-v1"),
+      salt: toArrayBuffer(encoder.encode("arcium-private-perps-v1")),
       iterations: 125_000,
       hash: "SHA-256"
     },
@@ -99,8 +103,14 @@ async function warmArciumClient() {
 }
 
 async function digest(value: string): Promise<string> {
-  const hash = await crypto.subtle.digest("SHA-256", encoder.encode(value));
+  const hash = await crypto.subtle.digest("SHA-256", toArrayBuffer(encoder.encode(value)));
   return bytesToBase64(new Uint8Array(hash));
+}
+
+function toArrayBuffer(bytes: Uint8Array): ArrayBuffer {
+  const copy = new Uint8Array(bytes.byteLength);
+  copy.set(bytes);
+  return copy.buffer;
 }
 
 function bytesToBase64(bytes: Uint8Array): string {
